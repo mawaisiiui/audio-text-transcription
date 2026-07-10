@@ -9,6 +9,9 @@ from pathlib import Path
 
 SUPPORTED_FORMATS = ["wav", "mp3"]
 
+class AudioValidationError(Exception):
+    """Raised when the input file is unusable."""
+
 def accept_audio_file(path_txt):
     path = Path(path_txt)
 
@@ -29,12 +32,4 @@ def accept_audio_file(path_txt):
     print(f"File: {path_txt} Accepted. format: {file_format} Size: {size} bytes")
 
     return path
-
-
-if __name__ == "__main__":
-
-    if len(sys.argv) != 2:
-        sys.exit("Usage: python audio_ingestion.py sample.wav")
-
-    accept_audio_file(sys.argv[1])
 
