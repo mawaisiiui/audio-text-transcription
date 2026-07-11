@@ -5,3 +5,14 @@ from .transcribe_audio import (
     transcribe_segments,
     TranscriptionError
 )
+from .schema import TranscriptionJsonResult, Segment
+
+__all__ = [
+    "accept_audio_file",
+    "TranscriptionError",
+    "AudioValidationError",
+    "transcribe_segments",
+    "transcribe_audio", 
+    "TranscriptionJsonResult",
+    "Segment"
+]

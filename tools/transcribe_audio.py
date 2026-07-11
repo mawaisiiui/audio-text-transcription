@@ -11,6 +11,7 @@ python3 transcribe_audio.py sample.wav
 """
 import sys
 
+from .schema import Segment, TranscriptionJsonResult
 
 class TranscriptionError(Exception):
     """Raised when the fails to transcribe."""
@@ -20,28 +21,37 @@ def transcribe_segments(audio_file):
 
     try:
         from faster_whisper import WhisperModel
-    except ImportError:
-        sys.exit("Please install faster_whisper uv pip install faster-whisper")
+    except ImportError as e:
+        raise TranscriptionError(
+            "Please install faster_whisper. uv -r requirements.txt"
+        ) from e
 
     model = WhisperModel('tiny', device="cpu", compute_type='int8')
 
-    segments, info = model.transcribe(str(audio_file))
+    try: 
+        segs, info = model.transcribe(str(audio_file))
 
-    chunks = []
-    for seg in segments:
-        chunks.append({
-            "start": round(seg.start, 2),
-            "end": round(seg.end, 2),
-            "text": seg.text.strip(),
-        })
+        chunks = []
+        for seg in segs:
+            chunks.append(
+                Segment(
+                    start= round(seg.start, 2),
+                    end= round(seg.end, 2),
+                    text= seg.text.strip(),
+                )
+            )
 
-    results = {
-        "file": str(audio_file),
-        "segments": chunks,
-        "info": info.language,
-        "duration": info.duration,
-    }
+    except Exception as e:
+        raise TranscriptionError(f"Failed on {audio_file.name}: {e}") from e
 
+
+    results = TranscriptionJsonResult(
+        file=audio_file.name,
+        language=info.language,
+        duration=round(info.duration, 2),
+        segments=chunks,
+    )
+    
     return results
 
 

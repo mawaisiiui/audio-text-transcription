@@ -33,7 +33,7 @@ def main():
         print(f"Transcription error: {e}")
         return 3
 
-    json_text = json.dumps(results, indent=2, ensure_ascii=False)
+    json_text = results.to_json()
 
     if args.out:
         out_file = args.out
