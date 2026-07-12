@@ -14,12 +14,15 @@ from tools import (
     transcribe_segments,
     AudioValidationError,
     TranscriptionError,
+    LLMProcessingError,
+    analyze_transcript
 )
 
 def main():
     parser = argparse.ArgumentParser("Audio transcription in Segments")
     parser.add_argument("sample", help="Audio file")
     parser.add_argument("--out", help="Output file")
+    parser.add_argument("--analyze", action="store_true", help="Also run LLM analysis (needs OPENAI_API_KEY)")
 
     args = parser.parse_args()
 
@@ -32,20 +35,28 @@ def main():
     except TranscriptionError as e:
         print(f"Transcription error: {e}")
         return 3
+    
+    output = results.to_dict()
+    if args.analyze:
+        try:
+            output["analysis"] = analyze_transcript(results)
+        except LLMProcessingError as e:
+            print(f"LLM analysis error: {e}", file=sys.stderr)
+            return 4
 
-    json_text = results.to_json()
+    json_text = json.dumps(output, indent=2, ensure_ascii=False)
 
     if args.out:
-        out_file = args.out
-
-        with open(out_file, "w", encoding="utf-8") as f:
+        with open(args.out, "w", encoding="utf-8") as f:
             f.write(json_text)
-        print(f"Wrote {out_file}", file=sys.stderr)
-
+        print(f"Wrote {args.out}", file=sys.stderr)
     else:
-        print(results)
+        print(json_text)
+
+    return 0
+
+
 
 
 if __name__ == "__main__":
-    main()
-    sys.exit(0)
+    sys.exit(main()) 

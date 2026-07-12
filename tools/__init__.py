@@ -5,6 +5,9 @@ from .transcribe_audio import (
     transcribe_segments,
     TranscriptionError
 )
+
+from .llm_processor import analyze_transcript, LLMProcessingError
+
 from .schema import TranscriptionJsonResult, Segment
 
 __all__ = [
@@ -14,5 +17,7 @@ __all__ = [
     "transcribe_segments",
     "transcribe_audio", 
     "TranscriptionJsonResult",
-    "Segment"
+    "Segment",
+    "LLMProcessingError",
+    "analyze_transcript"
 ]
