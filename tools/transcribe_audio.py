@@ -29,7 +29,7 @@ def transcribe_segments(audio_file):
     model = WhisperModel('tiny', device="cpu", compute_type='int8')
 
     try: 
-        segs, info = model.transcribe(str(audio_file))
+        segs, info = model.transcribe(str(audio_file), vad_filter=True)
 
         chunks = []
         for seg in segs:
