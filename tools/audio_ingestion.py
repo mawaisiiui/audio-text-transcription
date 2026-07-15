@@ -13,13 +13,13 @@ MAX_FILE_SIZE = 500 * 1024 * 1024 # 500 MB
 class AudioValidationError(Exception):
     """Raised when the input file is unusable."""
 
-def accept_audio_file(path_txt):
+def accept_audio_file(path_txt: str) -> Path:
     path = Path(path_txt)
 
     file_format = path.suffix.lstrip(".").lower()
 
     if not path.is_file():
-        raise AudioValidationError("File not exist: {path}")
+        raise AudioValidationError(f"File not exist: {path}")
 
     if file_format not in SUPPORTED_FORMATS:
         raise AudioValidationError("Format not supported")

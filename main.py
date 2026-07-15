@@ -18,7 +18,7 @@ from tools import (
     analyze_transcript
 )
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser("Audio transcription in Segments")
     parser.add_argument("sample", help="Audio file")
     parser.add_argument("--out", help="Output file")
@@ -50,8 +50,6 @@ def main():
         with open(args.out, "w", encoding="utf-8") as f:
             f.write(json_text)
         print(f"Wrote {args.out}", file=sys.stderr)
-    else:
-        print(json_text)
 
     return 0
 

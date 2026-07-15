@@ -10,6 +10,7 @@ python3 transcribe_audio.py sample.wav
 
 """
 import sys
+from pathlib import Path
 
 from .schema import Segment, TranscriptionJsonResult
 
@@ -17,7 +18,7 @@ class TranscriptionError(Exception):
     """Raised when the fails to transcribe."""
 
 
-def transcribe_segments(audio_file):
+def transcribe_segments(audio_file: Path) -> TranscriptionJsonResult:
 
     try:
         from faster_whisper import WhisperModel
@@ -55,7 +56,7 @@ def transcribe_segments(audio_file):
     return results
 
 
-def transcribe_audio(audio_file):
+def transcribe_audio(audio_file: Path) -> str:
 
     try:
         from faster_whisper import WhisperModel

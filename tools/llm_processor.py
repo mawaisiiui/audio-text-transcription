@@ -4,6 +4,8 @@ import json
 import os
 import re
 
+from .schema import TranscriptionJsonResult
+
 class LLMProcessingError(Exception):
     """Raised when the LLM step fails after retries."""
 
@@ -106,7 +108,7 @@ def _parse_json_reply(raw: str) -> dict:
     return data
 
 
-def analyze_transcript(results, max_retries: int = 1) -> dict:
+def analyze_transcript(results: TranscriptionJsonResult, max_retries: int = 1) -> dict:
     """Takes your TranscriptionJsonResult, returns the analysis dict."""
     transcript = " ".join(s.text for s in results.segments)
     

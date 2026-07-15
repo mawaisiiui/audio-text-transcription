@@ -18,7 +18,7 @@ class TranscriptionJsonResult:
     duration: float
     segments: list[Segment]        
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return asdict(self)
 
     def to_json(self) -> str:
